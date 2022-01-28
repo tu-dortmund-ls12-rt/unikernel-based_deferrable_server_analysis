@@ -10,58 +10,72 @@ class Rplusminus:
         self.hp_servers = hp_servers
         self.server = server
         self.values = dict()
+        self.evaluated_until = -1
         pass
 
-    def add_value(self, key, value):
+    def _add_value(self, key, value):
         """Add one more key and value to the list."""
         assert key not in self.values or self.values[key] == value
         self.values[key] = value
 
-    def add_values(self, lst):
-        """Add several keys and values to the list all at once."""
+    def add_values(self, lst, eval_end):
+        """Add several keys and values to the list all at once.
+        Note: It should be specified until when the evaluation was done."""
         for key, value in lst:
-            self.add_value(key, value)
+            self._add_value(key, value)
+        self.evaluated_until = eval_end
 
     def compute_values(self, end=None):
-        """Compute the values inside the interval [0, end]"""
+        """Compute the values inside the interval [0, end].
+        Standard value of end is the server budget."""
         # preparation
         hp_period_wcet = [[server.period, server.budget] for server in self.hp_servers]
         if end is None:
             end = self.server.budget
 
-        # local variables
-        c_prev = 0
-        c = 0
-        d = 0
-        e = 0
-        tda_val = 0
-        tda_val_prev = 0
+        assert end >= 0
 
-        # breakpoint()
+        # case highest priority server
+        if len(hp_period_wcet) == 0:
+            # no anchor values!
+            pass
+        else:
+            # local variables
+            c_prev = 0
+            c = 0
+            d = 0
+            e = 0
+            tda_val = 0
+            tda_val_prev = 0
 
-        while c <= end:
-            # compute by TDA
-            tda_val = tda_with_carry_in(hp_period_wcet, c, start_val=tda_val_prev)
+            # breakpoint()
 
-            # add value
-            d = tda_val - (tda_val_prev + (c - c_prev))
-            self.add_value(c, d)
+            while c <= end:
+                # compute by TDA
+                tda_val = tda_with_carry_in(hp_period_wcet, c, start_val=tda_val_prev)
 
-            # find next entry point (where TDA changes)
-            e = min(-(tda_val + period - wcet) % period for period, wcet in hp_period_wcet)
-            assert e != 0  # This should not be possible
+                # add value
+                d = tda_val - (tda_val_prev + (c - c_prev))
+                self._add_value(c, d)
 
-            # # DEBUG
-            # print('tda_val', tda_val)
-            # print('c', c)
-            # print('d', d)
-            # print('c_prev', c_prev)
-            # print('d_prev', d_prev)
+                # find next entry point (where TDA changes)
+                e = min([-(tda_val + period - wcet) % period for period, wcet in hp_period_wcet])
+                # breakpoint()
+                assert e != 0  # This should not be possible
 
-            # update values
-            c_prev = c
-            tda_val_prev = tda_val
-            c = c + e
+                # # DEBUG
+                # print('tda_val', tda_val)
+                # print('c', c)
+                # print('d', d)
+                # print('c_prev', c_prev)
+                # print('d_prev', d_prev)
+
+                # update values
+                c_prev = c
+                tda_val_prev = tda_val
+                c = c + e
+
+        self.evaluated_until = end  # update evaluation end
 
 
 class Rplus(Rplusminus):
@@ -69,6 +83,7 @@ class Rplus(Rplusminus):
 
     def eval(self, x):
         """Evaluate R^+ function value at point x."""
+        assert self.evaluated_until >= x
         return x + sum(item for key, item in self.values.items() if x >= key)
 
 
@@ -76,6 +91,7 @@ class Rminus(Rplusminus):
     """R^- function from our paper."""
 
     def eval(self, x):
+        assert self.evaluated_until >= x
         """Evaluate R^- function value at point x."""
         return x + sum(item for key, item in self.values.items() if x > key)
 
@@ -122,12 +138,14 @@ def wcrt_analysis_single(hp_servers, server, task):
     rplus = Rplus(hp_servers, server)
     rminus = Rminus(hp_servers, server)
 
-    # Compute anchor values
+    # Compute anchor values (for fast computation)
     rplus.compute_values()
-    rminus.values = rplus.values
+    rminus.add_values(rplus.values.items(), rplus.evaluated_until)
 
     # Compute our WCRT bound
-    supR = max(rplus.eval(x) + rminus.eval(task.wcet - x) for x in rplus.values if x <= task.wcet)
+    # Note: if no anchor values are available (e.g. for highest priority server), then just check supR at wcet
+    supR = max([rplus.eval(x) + rminus.eval(task.wcet - x) for x in rplus.values if x <= task.wcet],
+               default=rplus.eval(task.wcet))
     res = max(
         server.period - task.min_iat + supR,
         rminus.eval(task.wcet)
@@ -148,7 +166,7 @@ def wcrt_analysis(system):
 if __name__ == '__main__':
     """Some testing"""
     # tests = range(20)
-    tests = [2, 3]
+    tests = [4]
 
     if 1 in tests:
         # Test 1: TDA function
@@ -212,6 +230,23 @@ if __name__ == '__main__':
     if 4 in tests:
         # Test 4: Case Study
         import benchmark
+
+        server1 = benchmark.Server(10, 2)
+        server2 = benchmark.Server(20, 4)
+        server3 = benchmark.Server(50, 10)
+        server4 = benchmark.Server(100, 10)
+
+        task1 = benchmark.Task(12, 1)
+        task2 = benchmark.Task(20, 4)
+        task3 = benchmark.Task(60, 8)
+        task4 = benchmark.Task(130, 9)
+
+        system = benchmark.System(
+            [server1, server2, server3, server4],
+            [task1, task2, task3, task4]
+        )
+
+        print(wcrt_analysis(system))
 
         # - server
         # 1: T = 10, Q = 2;
