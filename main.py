@@ -1,11 +1,17 @@
 #!/usr/bin/env python3
 
 import sys
+import os
 import getopt
 
 
 def print_usage():
     print('test.py -s <switch>')
+
+
+def check_or_make_directory(dirname):
+    if not os.path.exists(dirname):
+        os.makedirs(dirname)
 
 
 if __name__ == "__main__":
@@ -22,4 +28,3 @@ if __name__ == "__main__":
             sys.exit()
         elif opt in ("-s",):  # define which part of the code is being executed
             code_switch = arg
-
