@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Synthetic creation of servers and tasks."""
 
 
