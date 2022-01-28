@@ -247,20 +247,3 @@ if __name__ == '__main__':
         )
 
         print(wcrt_analysis(system))
-
-        # - server
-        # 1: T = 10, Q = 2;
-        # task
-        # 1: T = 12, C = 1
-        # - server
-        # 2: T = 20, Q = 4;
-        # task
-        # 2: T = 20, C = 4
-        # - server
-        # 3: T = 50, Q = 10;
-        # task
-        # 3: T = 60, C = 8
-        # - server
-        # 4: T = 100, Q = 10;
-        # task
-        # 4: T = 130, C = 9
