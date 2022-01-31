@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """Synthetic creation of servers and tasks."""
 
+import numpy as np
+import random
+import math
+
 
 class System:
     """One system that has to be analysed."""
@@ -13,6 +17,13 @@ class System:
 
     def server_task_tuples(self):
         return zip(self.servers, self.tasks)
+
+    def __str__(self):
+        complete_str = ''
+        for s, t in zip(self.servers, self.tasks):
+            complete_str += 'Server period: ' + str(
+                s.period) + ' Server budget: ' + s.budget + ' Task min_iat: ' + t.min_iat
+        return 'test'
 
     @staticmethod
     def help():
@@ -50,3 +61,57 @@ class Task:
 
 
 '''reference: from https://github.com/tu-dortmund-ls12-rt/SSSEvaluation'''
+
+
+def uunifast(n, U_avg):
+    """UUnifast creation of utilization vector.
+    From: https://github.com/tu-dortmund-ls12-rt/SSSEvaluation"""
+    USet = []
+    sumU = U_avg
+    for i in range(n - 1):
+        nextSumU = sumU * math.pow(random.random(), 1 / (n - i))
+        USet.append(sumU - nextSumU)
+        sumU = nextSumU
+    USet.append(sumU)
+    return USet
+
+
+# def lognuniform(low=0, high=1, size=None, base=np.e):
+#     return np.power(base, np.random.uniform(low, high, size))
+
+def loguniform(n, Tmin=1, Tmax=100, base=10):
+    TSet = []
+    for i in range(n):
+        TSet.append(math.pow(base, random.uniform(math.log(Tmin, base), math.log(Tmax, base))))
+    return TSet
+
+
+def make_system(n, U_min, U_max, task_mit=[1.0, 1.5], task_wcet=[0.5, 1]):
+    # Servers
+    P = loguniform(n)
+    U = uunifast(n, random.uniform(U_min, U_max))
+    servers = [Server(p, p * u) for p, u in zip(P, U)]
+    servers.sort(key=lambda x: x.period)  # order servers by period
+
+    # Tasks
+    tasks = [Task(s.period * random.uniform(task_mit[0], task_mit[1]),
+                  s.budget * random.uniform(task_wcet[0], task_wcet[1])) for s in servers]
+
+    # System
+    return System(servers, tasks)
+
+
+if __name__ == '__main__':
+    """Some testing."""
+
+    tests = range(20)
+
+    if 1 in tests:
+        # Test 1: Correct behaviour of loguniform distribution.
+        TSet = loguniform(1000)
+        print('1 <= t < 10:', sum(1 for t in TSet if 1 <= t < 10))
+        print('10 <= t <= 100:', sum(1 for t in TSet if 10 <= t <= 100))
+        print('t < 1 or t > 100:', [t for t in TSet if t < 1 or t > 100])
+    if 2 in tests:
+        sy = make_system(3, 10, 10)
+        breakpoint()
