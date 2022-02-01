@@ -93,14 +93,16 @@ def loguniform(n, Tmin=1, Tmax=100, base=10):
     return TSet
 
 
-def make_system(n, U_min, U_max, task_mit=[1.0, 1.5], task_wcet=[0.5, 1], listof=None):
+def make_system(n_min, n_max, U_min, U_max, task_mit=[1.0, 1.5], task_wcet=[0.5, 1], listof=None):
     if listof is not None:
-        return [make_system(n, U_min, U_max, task_mit=task_mit, task_wcet=task_wcet) for _ in range(listof)]
+        return [make_system(n_min, n_max, U_min, U_max, task_mit=task_mit, task_wcet=task_wcet) for _ in range(listof)]
+
     # Servers
-    P = loguniform(n)
-    U = uunifast(n, random.uniform(U_min, U_max))
+    n = random.randint(n_min, n_max)  # number of servers for this system
+    P = loguniform(n)  # replenishment periods
+    U = uunifast(n, random.uniform(U_min, U_max))  # utilizations
     servers = [Server(p, p * u) for p, u in zip(P, U)]
-    servers.sort(key=lambda x: x.period)  # order servers by period
+    servers.sort(key=lambda x: x.period)  # order servers by replenishment period
 
     # Tasks
     tasks = [Task(s.period * random.uniform(task_mit[0], task_mit[1]),
@@ -122,8 +124,8 @@ if __name__ == '__main__':
         print('10 <= t <= 100:', sum(1 for t in TSet if 10 <= t <= 100))
         print('t < 1 or t > 100:', [t for t in TSet if t < 1 or t > 100])
     if 2 in tests:
-        sy = make_system(3, 0.1, 0.2)
+        sy = make_system(3, 3, 0.1, 0.2)
         breakpoint()
     if 3 in tests:
-        systems = make_system(3, 0.1, 0.2, listof=2)
+        systems = make_system(3, 3, 0.1, 0.2, listof=2)
         breakpoint()
