@@ -6,6 +6,7 @@
     ├── res                     # Resource packages
     │   ├── benchmark.py        # Server and task creation
     │   ├── our_analysis.py     # Our analysis
+    │   ├── plot.py             # Plotting functionality
     │   └── rtc_cb.py           # RTC-based analysis	
     ├── data                    # Evaluation data
     │   ├── 1setup              # Server and task specification
