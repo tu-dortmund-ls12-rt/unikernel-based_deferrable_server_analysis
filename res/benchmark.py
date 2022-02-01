@@ -21,9 +21,10 @@ class System:
     def __str__(self):
         complete_str = ''
         for s, t in zip(self.servers, self.tasks):
-            complete_str += 'Server period: ' + str(
-                s.period) + ' Server budget: ' + s.budget + ' Task min_iat: ' + t.min_iat
-        return 'test'
+            complete_str += str(s) + ' | ' + str(t) + '\n'
+        complete_str += f'Server utilization: {sum(s.budget / s.period for s in self.servers)}\n'
+        complete_str += f'Task utilzation: {sum(t.wcet / t.min_iat for t in self.tasks)}'
+        return complete_str
 
     @staticmethod
     def help():
@@ -41,6 +42,9 @@ class Server:
         self.period = period
         self.budget = budget
 
+    def __str__(self):
+        return 'Server period: ' + str(self.period) + ' Server budget: ' + str(self.budget)
+
     @staticmethod
     def help():
         print('Server(<replenishment period>, <budget of the server>')
@@ -53,6 +57,9 @@ class Task:
     def __init__(self, minimum_inter_arrival_time, wcet):
         self.min_iat = minimum_inter_arrival_time
         self.wcet = wcet
+
+    def __str__(self):
+        return 'Task min_iat: ' + str(self.min_iat) + ' Task wcet: ' + str(self.wcet)
 
     @staticmethod
     def help():
@@ -86,7 +93,9 @@ def loguniform(n, Tmin=1, Tmax=100, base=10):
     return TSet
 
 
-def make_system(n, U_min, U_max, task_mit=[1.0, 1.5], task_wcet=[0.5, 1]):
+def make_system(n, U_min, U_max, task_mit=[1.0, 1.5], task_wcet=[0.5, 1], listof=None):
+    if listof is not None:
+        return [make_system(n, U_min, U_max, task_mit=task_mit, task_wcet=task_wcet) for _ in range(listof)]
     # Servers
     P = loguniform(n)
     U = uunifast(n, random.uniform(U_min, U_max))
@@ -113,5 +122,8 @@ if __name__ == '__main__':
         print('10 <= t <= 100:', sum(1 for t in TSet if 10 <= t <= 100))
         print('t < 1 or t > 100:', [t for t in TSet if t < 1 or t > 100])
     if 2 in tests:
-        sy = make_system(3, 10, 10)
+        sy = make_system(3, 0.1, 0.2)
+        breakpoint()
+    if 3 in tests:
+        systems = make_system(3, 0.1, 0.2, listof=2)
         breakpoint()
