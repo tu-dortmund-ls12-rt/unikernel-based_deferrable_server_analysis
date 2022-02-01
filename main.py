@@ -41,12 +41,12 @@ if __name__ == "__main__":
 
     random.seed(314)
 
-    num_processors = 1
+    num_processors = 5
     switch_1 = True
     switch_2 = True
     switch_3 = True
 
-    num_systems = 100
+    num_systems = 1000
     num_servers = [10, 100]
     util_servers = [0.1, 0.4]
     util_servers = [0.1, 0.4]
