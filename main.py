@@ -150,7 +150,7 @@ if __name__ == "__main__":
 
         check_or_make_directory('data/3plots')
         plot.plot([data_1, data_2, data_3], f'data/3plots/plot{code_switch}_num_servers_combined_{util_servers=}.pdf',
-                  title=f'plot{code_switch}__{util_servers=}',
+                  title='',  # f'plot{code_switch}__{util_servers=}',
                   xticks=['10', '50', '100'])
 
     if code_switch == '3':
@@ -192,5 +192,5 @@ if __name__ == "__main__":
         check_or_make_directory('data/3plots')
         plot.plot([data_1, data_2, data_3, data_4],
                   f'data/3plots/plot{code_switch}_{num_servers=}_util_servers_combined.pdf',
-                  title=f'plot{code_switch}__{util_servers=}',
+                  title='',  # f'plot{code_switch}__{util_servers=}',
                   xticks=['10%', '20%', '30%', '40%'])
