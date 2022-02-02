@@ -1,14 +1,32 @@
-"""RTC based analysis from Cuijpers and Bril in 2007."""
+"""State of the art (RTC based) analysis from Cuijpers and Bril in 2007."""
+from our_analysis import Rminus
 
 
-def wcrt_analysis_single(server, task):
+def wcrt_analysis_single_pessimistic(server, task):
     res = task.wcet * server.period / server.budget + 2 * server.period
     assert task.min_iat + 2 * server.period >= res
     return task.wcet * server.period / server.budget + 2 * server.period
 
 
+def wcrt_analysis_single(hp_servers, server, task):
+    # compute Rminus
+    rminus = Rminus(hp_servers, server)
+    rminus.compute_values()
+
+    # result
+    res = task.wcet * server.period / server.budget + 2 * rminus.eval(server.budget)
+
+    assert task.min_iat + 2 * server.period >= res
+    assert task.wcet * server.period / server.budget + 2 * server.period >= res
+
+    return res
+
+
 def wcrt_analysis(system):
-    return [wcrt_analysis_single(server, task) for server, task in system.server_task_tuples()]
+    res = []
+    for idx in range(len(system.servers)):
+        res.append(wcrt_analysis_single(system.servers[:idx], system.servers[idx], system.tasks[idx]))
+    return res
 
 
 if __name__ == '__main__':
