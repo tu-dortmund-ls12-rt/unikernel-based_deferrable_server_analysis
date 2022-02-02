@@ -1,5 +1,5 @@
 """State of the art (RTC based) analysis from Cuijpers and Bril in 2007."""
-from our_analysis import Rminus
+from .our_analysis import Rminus
 
 
 def wcrt_analysis_single_pessimistic(server, task):

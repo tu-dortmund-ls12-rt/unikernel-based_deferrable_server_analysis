@@ -7,6 +7,7 @@ from res import benchmark, our_analysis, rtc_cb, plot
 import pickle
 from multiprocessing import Pool
 import random
+from statistics import median
 
 
 # from res import benchmark
@@ -151,7 +152,12 @@ if __name__ == "__main__":
         check_or_make_directory('data/3plots')
         plot.plot([data_1, data_2, data_3], f'data/3plots/plot{code_switch}_num_servers_combined_{util_servers=}.pdf',
                   title='',  # f'plot{code_switch}__{util_servers=}',
-                  xticks=['10', '50', '100'])
+                  xticks=['10', '50', '100'],
+                  yticks=[0.0, 0.2, 0.4, 0.6],
+                  ylimits=[-0.02, 0.62])
+
+        print('medians', median(data_1), median(data_2), median(data_3),
+              'total:', median(data_1 + data_2 + data_3))
 
     if code_switch == '3':
         num_servers = [10, 100]
@@ -193,4 +199,9 @@ if __name__ == "__main__":
         plot.plot([data_1, data_2, data_3, data_4],
                   f'data/3plots/plot{code_switch}_{num_servers=}_util_servers_combined.pdf',
                   title='',  # f'plot{code_switch}__{util_servers=}',
-                  xticks=['10%', '20%', '30%', '40%'])
+                  xticks=['10%', '20%', '30%', '40%'],
+                  yticks=[0.0, 0.2, 0.4, 0.6],
+                  ylimits=[-0.02, 0.62])
+
+        print('medians', median(data_1), median(data_2), median(data_3), median(data_4),
+              'total:', median(data_1 + data_2 + data_3 + data_4))
