@@ -143,9 +143,14 @@ def wcrt_analysis_single(hp_servers, server, task):
     rminus.add_values(rplus.values.items(), rplus.evaluated_until)
 
     # Compute our WCRT bound
-    # Note: if no anchor values are available (e.g. for highest priority server), then just check supR at wcet
-    supR = max([rplus.eval(x) + rminus.eval(task.wcet - x) for x in rplus.values if x <= task.wcet],
-               default=rplus.eval(task.wcet))
+    c_values = list(rplus.values)
+    c_values += [task.wcet - entry for entry in c_values]  # add inverse C-values
+    c_values += [0, task.wcet]  # add outer points.
+    c_values.sort()  # sort
+    # find values between two values:
+    c_middle = [(entry1 + entry2) / 2 for entry1, entry2 in zip(c_values[:-1], c_values[1:])]
+    # check all values
+    supR = max([rplus.eval(x) + rminus.eval(task.wcet - x) for x in c_middle if 0 <= x < task.wcet])
     res = max(
         server.period - task.min_iat + supR,
         rminus.eval(task.wcet)
@@ -208,7 +213,7 @@ if __name__ == '__main__':
         print('anchor values from servers', [[x, Rtest.eval(x)] for x in Rtest.values])
 
         Rtestminus = Rminus([server1, server2], server3)
-        Rtestminus.values = Rtest.values  # hand over values
+        Rtestminus.add_values(Rtest.values.items(), Rtest.evaluated_until)  # hand over values
         print([[x, Rtestminus.eval(x)] for x in Rtestminus.values])
 
     if 3 in tests:
@@ -224,7 +229,7 @@ if __name__ == '__main__':
         print('anchor values from servers', [[x, Rtest.eval(x)] for x in Rtest.values])
 
         Rtestminus = Rminus([server1, server2], server3)
-        Rtestminus.values = Rtest.values  # hand over values
+        Rtestminus.add_values(Rtest.values.items(), Rtest.evaluated_until)  # hand over values
         print([[x, Rtestminus.eval(x)] for x in Rtestminus.values])
 
     if 4 in tests:
