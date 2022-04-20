@@ -47,7 +47,7 @@ or
 ```
 python3.9 -m pip install matplotlib numpy
 ```
-In case there is any dependent package missing, please install them accordingly.
+In case any dependent packages are missing, please install them accordingly.
 
 ## File Structure
     .
