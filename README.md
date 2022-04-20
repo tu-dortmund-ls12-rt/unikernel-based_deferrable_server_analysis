@@ -25,7 +25,7 @@ sudo add-apt-repository ppa:deadsnakes/ppa
 sudo apt-get update
 ```
 
-To run the experiments Python 3.7 is required (Python 3.9 might also work). Moreover, the following packages are required:
+To run the experiments Python 3.7 is required (Python 3.10.4 should also work). Moreover, the following packages are required:
 ```
 gc
 argparse
@@ -34,8 +34,9 @@ numpy
 scipy
 random
 matplotlib
-operator
-signal
+pickle
+multiprocessing
+statistics
 ```
 
 Assuming that Python 3.7 is installed in the targeted machine, to install the required packages:
