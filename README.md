@@ -27,7 +27,6 @@ sudo apt-get update
 
 To run the experiments Python 3.7 is required (Python 3.10.4 should also work). Moreover, the following packages are required:
 ```
-gc
 argparse
 math
 numpy
@@ -41,11 +40,11 @@ statistics
 
 Assuming that Python 3.7 is installed in the targeted machine, to install the required packages:
 ```
-pip3 install scipy numpy matplotlib argparse
+pip3 install scipy numpy matplotlib argparse statistics
 ```
 or
 ```
-python3.7 -m pip install scipy numpy matplotlib argparse
+python3.7 -m pip install scipy numpy matplotlib argparse statistics
 ```
 In case there is any dependent package missing, please install them accordingly.
 
