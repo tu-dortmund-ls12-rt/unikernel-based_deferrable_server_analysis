@@ -2,9 +2,9 @@
 
 The repository is used to reproduce the evaluation from
 
-Unikernel-Based Real-Time Virtualization under Deferrable Servers: Analysis and Realization
+_Unikernel-Based Real-Time Virtualization under Deferrable Servers: Analysis and Realization_
 
-for ECRTS 2022
+for ECRTS 2022.
 
 This document is organized as follows:
 1. [Environment Setup](#environment-setup)
@@ -17,34 +17,35 @@ This document is organized as follows:
 
 Some common software should be installed:
 ```
-sudo apt-get install software-properties-common git screen python3.7
+sudo apt-get install software-properties-common git python3.9
 ```
-If the installation of Python3.7 doesn't work, likely you need to add deadsnakes PPA beforehand as it is not available on universe repo:
+If the installation of Python3.9 doesn't work, likely you need to add deadsnakes PPA beforehand as it is not available on universe repo:
 ```
 sudo add-apt-repository ppa:deadsnakes/ppa
 sudo apt-get update
 ```
 
-To run the experiments Python 3.7 is required (Python 3.10.4 should also work). Moreover, the following packages are required:
+To run the experiments Python 3.9 is required (another version of Python 3 might also work). Moreover, the following packages are required:
 ```
-argparse
+getopt
 math
-numpy
-scipy
-random
 matplotlib
-pickle
 multiprocessing
+numpy
+os
+pickle
+random
 statistics
+sys
 ```
 
-Assuming that Python 3.7 is installed in the targeted machine, to install the required packages:
+Assuming that Python 3.9 is installed in the targeted machine, to install the required packages:
 ```
-pip3 install scipy numpy matplotlib argparse statistics
+pip3 install matplotlib numpy
 ```
 or
 ```
-python3.7 -m pip install scipy numpy matplotlib argparse statistics
+python3.9 -m pip install matplotlib numpy
 ```
 In case there is any dependent package missing, please install them accordingly.
 
@@ -75,7 +76,7 @@ git clone https://github.com/tu-dortmund-ls12-rt/unikernel-based_deferrable_serv
 ```
 Move into the extracted/cloned folder, change the permissions of the script to be executable, and execute auto.sh natively:
 ```
-cd end-to-end
+cd unikernel-based_deferrable_server_analysis
 chmod 777 auto.sh
 ./auto.sh
 ```
@@ -118,8 +119,8 @@ Theorem 7 | our_analysis.wcrt_analysis_single()
 
 ### Acknowledgments
 
-This work has been supported by European Research Council (ERC) Consolidator Award 2019, as part of PropRT (Number 865170), and by Deutsche Forschungsgemeinschaft (DFG), as part of Sus-Aware (Project no. 398602212)
+This work has been supported by European Research Council (ERC) Consolidator Award 2019, as part of PropRT (Number 865170), and by Deutsche Forschungsgemeinschaft (DFG), as part of Sus-Aware (Project no. 398602212).
 
 ### License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
