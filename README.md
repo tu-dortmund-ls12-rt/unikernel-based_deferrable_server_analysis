@@ -4,13 +4,13 @@
 
 _Unikernel-Based Real-Time Virtualization under Deferrable Servers: Analysis and Realization_
 
-for ECRTS 2022. This document is explaining how to use the artifact to repeat the experiments presented in the paper, i.e., Section 6.1. Due to the nature of a close-source project with the company, i.e., EMVICORE GmbH, the setup of the case study in Section 6.2 is not included in this artifact. The rest of the document is organized as follows:
+for ECRTS 2022. This document is explaining how to use the artifact to repeat the experiments presented in the paper, i.e., Section 6.1. Due to the nature of a close-source project with the company, i.e., [EMVICORE GmbH](https://emvicore.com/de/), the source code of the case study in Section 6.2 is not included in this artifact. Please cite the above paper when reporting, reproducing or extending the results.
+
+The rest of the document is organized as follows:
 1. [Environment Setup](#environment-setup)
 2. [How to run the experiments](#how-to-run-the-experiments)
 3. [Overview of the corresponding functions](#overview-of-the-corresponding-functions)
 4. [Miscellaneous](#miscellaneous)
-
-Please cite the above paper when reporting, reproducing or extending the results.
 
 ## Environment Setup
 ### Requirements
@@ -47,7 +47,9 @@ or
 ```
 python3.9 -m pip install matplotlib numpy
 ```
-In case any dependent packages are missing, please install them accordingly. *According to the feedback of one reviewer, Python 3.10 might not require all dependncies above.
+In case any dependent packages are missing, please install them accordingly. 
+
+According to the feedback of one reviewer, Python 3.10 might not require all dependncies listed above.
 
 ## File Structure
     .
