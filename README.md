@@ -63,7 +63,7 @@ According to the feedback of one reviewer, Python 3.10 might not require all dep
     │   ├── 2results            # Evaluation results
     │   └── 3plots              # Plots to present the results
     ├── main.py                 # Main function of the evaluation
-    ├── auto.sh                # bash-script to automize the evaluation
+    ├── auto.sh                 # bash-script to automize the evaluation
     └── README.md
 
 Note that the source code of the case study part (Section 6.2) is contributed by the business partner, so it is excluded from this repository.
