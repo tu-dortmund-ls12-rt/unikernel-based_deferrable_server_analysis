@@ -1,12 +1,10 @@
 # Unikernel-based Deferrable Server Analysis
 
-The repository is used to reproduce the evaluation from
+[The repository on Github](https://github.com/tu-dortmund-ls12-rt/unikernel-based_deferrable_server_analysis) is used to reproduce the evaluation from
 
 _Unikernel-Based Real-Time Virtualization under Deferrable Servers: Analysis and Realization_
 
-for ECRTS 2022.
-
-This document is organized as follows:
+for ECRTS 2022. This document is explaining how to use the artifact to repeat the experiments presented in the paper, i.e., Section 6.1. Due to the nature of a close-source project with the company, i.e., EMVICORE GmbH, the setup of the case study in Section 6.2 is not included in this artifact. The rest of the document is organized as follows:
 1. [Environment Setup](#environment-setup)
 2. [How to run the experiments](#how-to-run-the-experiments)
 3. [Overview of the corresponding functions](#overview-of-the-corresponding-functions)
@@ -47,7 +45,7 @@ or
 ```
 python3.9 -m pip install matplotlib numpy
 ```
-In case any dependent packages are missing, please install them accordingly.
+In case any dependent packages are missing, please install them accordingly. *According to the feedback of one reviewer, Python 3.10 might not require all dependncies above.
 
 ## File Structure
     .
@@ -61,14 +59,14 @@ In case any dependent packages are missing, please install them accordingly.
     │   ├── 2results            # Evaluation results
     │   └── 3plots              # Plots to present the results
     ├── main.py                 # Main function of the evaluation
-    ├── auto.ssh                # bash-script to automize the evaluation
+    ├── auto.ss                # bash-script to automize the evaluation
     └── README.md
 
 Note that the source code of the case study part (Section 6.2) is contributed by the business partner, so it is excluded from this repository.
 
 ### Deployment
 
-The following steps explain how to deploy this framework on the machine:
+The following steps explain how to deploy this framework on a common PC:
 
 First, clone the git repository or download the [zip file](https://github.com/tu-dortmund-ls12-rt/unikernel-based_deferrable_server_analysis/archive/refs/heads/main.zip):
 ```
@@ -87,8 +85,8 @@ chmod 777 auto.sh
 
 Paper figure | Plot in data/3plots
 ---|---
-Fig. 7 | 'plot2_num_servers_combined_util_servers=[0.1, 0.4].pdf'
-Fig. 8 | 'plot3_num_servers=[10, 100]_util_servers_combined.pdf'
+Fig. 6 | 'plot2_num_servers_combined_util_servers=[0.1, 0.4].pdf'
+Fig. 7 | 'plot3_num_servers=[10, 100]_util_servers_combined.pdf'
 
 As a reference, we utilize a machine running Archlinux 5.17.3-arch1-1 x86_64 GNU/Linux,with i7-10610U CPU and 16 GB main memory. 
 It takes about 170 seconds with this machine to obtain these two figures, when set ```num_processors = 5``` in ```main.py```
@@ -112,10 +110,10 @@ Theorem 7 | our_analysis.wcrt_analysis_single()
 ### Authors
 
 * Kuan-Hsun Chen (University of Twente)
-* Mario Günzel (TU Dortmund)
+* Mario Günzel (TU Dortmund University)
 * Boguslaw Jablkowski (EMVICORE GmbH)
 * Markus Buschhoff (EMVICORE GmbH)
-* Jian-Jia Chen (TU Dortmund)
+* Jian-Jia Chen (TU Dortmund University)
 
 ### Acknowledgments
 
