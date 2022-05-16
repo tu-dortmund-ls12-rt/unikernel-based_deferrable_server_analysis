@@ -10,6 +10,8 @@ for ECRTS 2022. This document is explaining how to use the artifact to repeat th
 3. [Overview of the corresponding functions](#overview-of-the-corresponding-functions)
 4. [Miscellaneous](#miscellaneous)
 
+Please cite the above paper when reporting, reproducing or extending the results.
+
 ## Environment Setup
 ### Requirements
 
